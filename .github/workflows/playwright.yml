@@ -1,0 +1,36 @@
+name: Playwright Tests # Specifies the name of the workflow as it will appear in the GitHub Actions tab.
+
+on:
+  workflow_dispatch: # Allows the workflow to be triggered manually from the GitHub Actions tab.
+
+jobs:
+  test: # Defines a job named 'test'.
+    timeout-minutes: 60 # Sets a maximum execution time of 60 minutes for the job to prevent hanging processes.
+    runs-on: ubuntu-latest # Specifies that the job should run on the latest available version of Ubuntu runner.
+    defaults:
+      run:
+        working-directory: playwright # Sets the default working directory for all 'run' steps to the 'playwright' folder.
+    steps:
+      - uses: actions/checkout@v4 # Checks out the repository code so the workflow can access it.
+
+      - uses: actions/setup-node@v4 # Sets up the Node.js environment.
+        with:
+          node-version: lts/* # Uses the latest Long Term Support (LTS) version of Node.js.
+          cache: 'npm' # Caches npm dependencies to speed up subsequent runs.
+          cache-dependency-path: playwright/package-lock.json # Specifies the path to the lock file for accurate caching.
+
+      - name: Install dependencies # Friendly name for the step.
+        run: npm ci # Installs dependencies cleanly based on package-lock.json (faster and more reliable than npm install).
+
+      - name: Install Playwright Browsers # Friendly name for the step.
+        run: npx playwright install --with-deps # Installs the necessary browser binaries and system dependencies required by Playwright.
+
+      - name: Run Playwright tests # Friendly name for the step.
+        run: npx playwright test # Executes the Playwright tests.
+
+      - uses: actions/upload-artifact@v4 # Uses the actions/upload-artifact action to save files.
+        if: ${{ !cancelled() }} # Ensures this step runs even if tests fail, so we can see the report.
+        with:
+          name: playwright-report # Names the artifact 'playwright-report' for download.
+          path: playwright/playwright-report/ # Specifies the path to the generated Playwright report.
+          retention-days: 30 # Keeps the artifacts available for download for 30 days.
