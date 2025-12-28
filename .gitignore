@@ -24,9 +24,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # Cypress
-cypress/videos
-cypress/screenshots
-cypress/downloads
+cypress/cypress/videos
+cypress/cypress/screenshots
+cypress/cypress/downloads
+cypress/cypress/reports
 
 # Playwright
 playwright-report/

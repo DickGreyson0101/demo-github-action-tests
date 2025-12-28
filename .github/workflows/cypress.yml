@@ -35,4 +35,5 @@ jobs:
           path: | # Specifies the files/folders to include in the artifact.
             cypress/cypress/videos
             cypress/cypress/screenshots
+            cypress/cypress/reports
           retention-days: 30 # Keeps the artifacts available for download for 30 days.
