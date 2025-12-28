@@ -1,7 +1,23 @@
 name: Cypress Tests # Specifies the name of the workflow as it will appear in the GitHub Actions tab.
+run-name: Cypress Tests - ${{ inputs.env }} ${{ inputs.tag }}
 
 on:
   workflow_dispatch: # Allows the workflow to be triggered manually from the GitHub Actions tab.
+    inputs:
+      env:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+        - qa
+        - uat
+        - prod
+      tag:
+        description: 'Test tags to run (e.g. @smoke, @regression)'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   cypress-run: # Defines a job named 'cypress-run'.
